@@ -1,0 +1,84 @@
+tries = 0
+
+def menu():
+    print("------ Menu ------")
+    print("Q - Quote of the day")
+    print("S - Sad")
+    print("H - Happy")
+    print("N - Nervous")
+    print("B - Bored")
+    print("R - Rant zone")
+
+menu()
+feeling = input("How are you feeling today? ").upper()
+
+valid = False
+while valid == False:
+  if feeling not in 'QSHNBR':
+    feeling = input("Must be 'Q', 'S', 'H', 'N' 'R' or 'B'. Please enter again: ").upper()
+  else:
+    valid = True 
+
+import requests
+
+# quote of the day generator
+def get_random_quote(): 
+	try:
+		## making the get request
+		response = requests.get("https://quote-garden.herokuapp.com/api/v3/quotes/random")
+		if response.status_code == 200:
+			## extracting the core data
+			json_data = response.json()
+			data = json_data['data']
+
+			## getting the quote from the data
+			print(data[0]['quoteText'])
+		else:
+			print("Error while getting quote")
+	except:
+		print("Something went wrong! Try Again!")
+  
+def is_sad():
+  print("Penguin Yuji: Chirp Chirp, this too shall pass. Always remember, tough times don't last, tough people do. You got this!")
+
+def is_happy():
+  print("Penguin Yuji is glad that you're happy :) I hope the days ahead are filled with more happiness to come!")
+
+def is_nervous():
+  print("It's okay to feel nervous. Take a deep breath. Just give your best shot at whatever you do and everything will be fine. Chirp!")
+
+def number_guessing_game(correctnum, guess):
+  if guess == correctnum:
+    return True
+  else:
+    return False
+  
+if feeling == "Q":
+  get_random_quote()
+elif feeling == 'S':
+  is_sad()
+elif feeling == 'H':
+  is_happy()
+elif feeling == 'N':
+  is_nervous()
+elif feeling == 'R':
+  print("Welcome to the Rant Zone. Anything you say here is strictly confidential and will be destroyed once the session is terminated.")
+  rant = input("What's on your mind? ")
+elif feeling == 'B':
+  import random
+  correctnum = random.randint(1, 50)
+  print("Welcome to the number guessing game! A number from 1 to 50 has been generated. You have five tries to guess it. Good luck!")
+  for i in range(5):
+    guess = int(input("Enter your guess: "))
+    tries = tries + 1
+    if number_guessing_game(correctnum, guess):
+     print("Hooray! You got it")
+     break
+    elif guess > correctnum:
+      print("Guess is too high")
+    elif guess < correctnum:
+      print("Guess is too low")
+    else:
+     print("Oh no! You didnt get it. ")
+    if tries == 5:
+     print("Game over! The number was", correctnum)
